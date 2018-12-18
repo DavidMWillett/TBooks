@@ -1,0 +1,53 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-06-03 15:44+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: Reporter.py:104 Reporter.py:109 Reporter.py:90
+msgid "del."
+msgstr "gel."
+
+#: Reporter.py:80 Reporter.py:79 Reporter.py:60
+msgid "I respectfully request payment for the following translation work:"
+msgstr "für die folgenden Übersetzungsarbeiten erlaube ich mir zu berechnen:"
+
+#: Reporter.py:52 Reporter.py:54
+msgid "Invoice"
+msgstr "Rechnung"
+
+#: Reporter.py:71
+#, python-format
+msgctxt "m"
+msgid "Dear %s %s"
+msgstr "Sehr geehrter %s %s"
+
+#: Reporter.py:73
+#, python-format
+msgctxt "f"
+msgid "Dear %s %s"
+msgstr "Sehr geehrter %s %s"
+
+#: Reporter.py:75 Reporter.py:59
+msgid "Dear Sir/Madam"
+msgstr "Sehr geehrte Damen und Herren"
+
+#: Reporter.py:97
+msgid "Account number"
+msgstr "Kontonummer"
+
+#: Reporter.py:98
+msgid "Bank sort code"
+msgstr "Bankleitzahl"
