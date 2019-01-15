@@ -196,12 +196,28 @@ class VATInfoPage(wx.NotebookPage):
 		szrMain = wx.BoxSizer(wx.VERTICAL)
 		szrMain.Add(lctMain, 1, wx.EXPAND | wx.ALL, 5)
 		pnlMain.SetSizerAndFit(szrMain)
-		
-		
+
+
+class ECSalesPage(wx.NotebookPage):
+	sNAME = 'EC Sales'
+	iDATASET = DataModel.iECSALES
+
+	def __init__(self, cParent, cDataModel):
+		wx.NotebookPage.__init__(self, cParent, wx.ID_ANY)
+
+		pnlMain = wx.Panel(self, wx.ID_ANY)
+		lctMain = ItemList(pnlMain, cDataModel.cECSalesData.GetHeadings())
+		lctMain.UpdateItems(cDataModel.cECSalesData.GetItems())
+
+		szrMain = wx.BoxSizer(wx.VERTICAL)
+		szrMain.Add(lctMain, 1, wx.EXPAND | wx.ALL, 5)
+		pnlMain.SetSizerAndFit(szrMain)
+
+
 class TBNotebook(wx.Notebook):
 
 	lItemPages = \
-		JobsPage, InvoicesPage, OrderersPage, CustomersPage, PaymentsPage, SuppliersPage, VATInfoPage
+		JobsPage, InvoicesPage, OrderersPage, CustomersPage, PaymentsPage, SuppliersPage, VATInfoPage, ECSalesPage
 
 	def __init__(self, cParent, cDataModel):
 		

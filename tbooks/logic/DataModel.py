@@ -7,7 +7,7 @@ import ReporterCaller as Reporter, EuroPrice
 from tbooks.model.model import Session
 from tbooks.model.model import Job, Invoice, Orderer, Customer, Payment, Supplier
 
-iJOBS, iINVOICES, iORDERERS, iCUSTOMERS, iPAYMENTS, iSUPPLIERS, iVATINFO = range(7)
+iJOBS, iINVOICES, iORDERERS, iCUSTOMERS, iPAYMENTS, iSUPPLIERS, iVATINFO, iECSALES = range(8)
 
 class DataModel():
 	
@@ -20,7 +20,8 @@ class DataModel():
 		self.cPaymentData = PaymentData(self)
 		self.cSupplierData = SupplierData(self)
 		self.cVATInfoData = VATInfoData(self)
-		
+		self.cECSalesData = ECSalesData(self)
+
 		self.ItemData = {
 			iJOBS: self.cJobData,
 			iINVOICES: self.cInvoiceData,
@@ -28,7 +29,8 @@ class DataModel():
 			iCUSTOMERS: self.cCustomerData,
 			iPAYMENTS: self.cPaymentData,
 			iSUPPLIERS: self.cSupplierData,
-			iVATINFO: self.cVATInfoData }
+			iVATINFO: self.cVATInfoData,
+			iECSALES: self.cECSalesData }
 
 	def Attach(self, observer):
 		
@@ -631,3 +633,52 @@ class VATInfoData():
 			fTotal    += fGBPValue
 			fTotalVAT += fGBPValue * fVAT
 		return fTotal, fTotalVAT
+
+
+# Provides data for EC Sales page in a format matching that required for HMRC
+
+class ECSalesData():
+
+	def __init__(self, model):
+
+		self.session = Session()
+
+	def GetHeadings(self):
+
+		return (('Period', 'date'), ('VAT Reg. No.', 'text'), ('Total Value', 'decimal'))
+
+	# Returns list of invoice totals in GBP grouped by quarter and VAT ID No for display
+
+	def GetItems(self):
+
+		query = self.session.query(
+			Invoice.Date,
+			Customer.VATIDNo,
+			Job.Currency,
+			sqlalchemy.func.sum(Job.Quantity * Job.UnitPrice).label('Total'))\
+			.join(Job).join(Orderer).join(Customer).group_by(Invoice.Number)
+		records = []
+		for invoice in query:
+			period = self._quarter_from_date(invoice.Date)
+			vatidno = invoice.VATIDNo
+			total = invoice.Total
+			if invoice.Currency == 'GBP':
+				pass
+			elif invoice.Currency == 'EUR':
+				total = EuroPrice.GetGBPValue(total, invoice.Date)
+			else:
+				assert False
+			for record in records:
+				if record[0] == period and record[1] == vatidno:
+					record[2] += total
+					break
+			else:
+				records.append([period, vatidno, total])
+
+		return records
+
+	# Returns quarter in format "mm/yy" for date object, where mm is number of final month in quarter.
+
+	def _quarter_from_date(self, date):
+
+		return "{:02d}/{:02d}".format(((date.month - 1) / 3 + 1) * 3, date.year % 100)
