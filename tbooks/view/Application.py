@@ -243,11 +243,13 @@ class ItemList(wx.ListCtrl):
 		wx.ListCtrl.__init__(self, cParent, wx.ID_ANY, style = wx.LC_REPORT | wx.LC_SINGLE_SEL)
 		
 		self.tHeadings = tHeadings
-		
+
 		for sField, sType in self.tHeadings:
 			iAlign = wx.LIST_FORMAT_RIGHT if sType in ['decimal', 'float', 'int'] else wx.LIST_FORMAT_LEFT
-			self.InsertColumn(-1, sField, iAlign, wx.LIST_AUTOSIZE_USEHEADER)
-			
+			self.InsertColumn(self.GetColumnCount(), sField, iAlign, wx.LIST_AUTOSIZE_USEHEADER)
+
+		self.SetColumnWidth(0, 80) # Autosize doesn't work on column 0 in MSW, so set to standard width
+
 	def UpdateItems(self, tTableData):
 
 		self.DeleteAllItems()
